@@ -1,53 +1,14 @@
-PLY Renderer Starter Kit for Windows
-====================================
+3D-slicer quick start
+=====================
 
-Folder structure
-----------------
-models/      Put .ply files or subfolders here.
-output/      Default output location.
-renderer/    Renderer, launcher, requirements, and labels template.
+1) Put .ply files in models\
+2) Run setup_renderer_env.bat once
+3) Run one of:
 
-First use
----------
-1. Put your .ply file into models\
-2. Double-click setup_renderer_env.bat once.
-3. Open Command Prompt in this folder.
-4. Run:
+   render_model.bat "my_model.ply" output -phi 20 -theta 20
+   launch_renderer_gui.bat
+   launch_segmenter_gui.bat
 
-   render_model.bat "HAD16_279_2916 FIGURINE.ply" output -phi 20 -theta 20
+The project uses one shared venv in the repo root. Do not create a second venv inside segmentation tool.
 
-The wrapper accepts quoted filenames containing spaces.
-
-Input examples
---------------
-A filename located in models\:
-   render_model.bat "HAD16_279_2916 FIGURINE.ply"
-
-A folder located in models\:
-   render_model.bat figurines
-
-A direct path:
-   render_model.bat "C:\data\model.ply" "C:\data\renders"
-
-Important arguments
--------------------
--phi N                  Azimuth step in degrees. Default: 2
--theta N                Polar-angle step in degrees. Default: 2
---classification NAME   Apply one classification to all models in the run
---class-from-parent      Use parent-folder names as classifications
---labels-csv FILE        Read classifications from a CSV
---width N                PNG width. Default: 512
---height N               PNG height. Default: 512
---overwrite              Re-render existing images
---dry-run                Preview planned work without rendering
-
-Examples
---------
-Small test:
-   render_model.bat "HAD16_279_2916 FIGURINE.ply" output -phi 20 -theta 20
-
-With classification:
-   render_model.bat "HAD16_279_2916 FIGURINE.ply" output -phi 20 -theta 20 --classification figurine
-
-Folder input with classes inferred from subfolders:
-   render_model.bat pottery output --class-from-parent -phi 10 -theta 10
+For detailed docs, read README.md and docs\SHARED_VENV_WORKFLOW.md.

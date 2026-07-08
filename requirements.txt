@@ -1,0 +1,5 @@
+# Optional aggregate requirements note.
+# The setup script installs both:
+#   renderer/requirements.txt
+#   segmentation tool/requirements.txt
+# into the shared root venv.

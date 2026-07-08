@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/archaeology-segmentation-manifest.schema.json",
+  "title": "Archaeological Segmentation Manifest",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "artifact_id",
+    "artifact_class",
+    "images"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "description": "v0.2 treats taxonomy parts as optional."
+    },
+    "artifact_id": {
+      "type": "string"
+    },
+    "artifact_class": {
+      "type": "string"
+    },
+    "images": {
+      "type": "array"
+    },
+    "best_views_by_part": {
+      "type": "object"
+    },
+    "part_presence_policy": {
+      "type": "object"
+    }
+  }
+}

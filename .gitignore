@@ -1,4 +1,4 @@
-# Virtual environments
+# Shared Python environment
 venv/
 .venv/
 
@@ -8,22 +8,38 @@ __pycache__/
 *.pyo
 *.pyd
 
-# Render outputs
-output/*
-!output/.gitkeep
-*.png
-
-# Large 3D input files - keep only examples if intentionally small
+# Local inputs and generated outputs
 models/*
 !models/.gitkeep
 !models/README.txt
+!models/put_your_ply_files_here.txt
 
-# Logs and error reports
+output/*
+!output/.gitkeep
+!output/renderer/
+!output/renderer/.gitkeep
+!output/segmenter/
+!output/segmenter/.gitkeep
+
+# Old/local segmentation output location is deprecated
+"segmentation tool"/outputs/
+
+# Rendered/segmented images should not be committed by default
+*.png
+*.jpg
+*.jpeg
+*.webp
+
+# Large 3D files should be added intentionally only
+*.ply
+!models/example*.ply
+
+# Logs / temporary reports
 errors.csv
 *.log
 
-# OS / editor junk
-.DS_Store
+# OS / editor
 Thumbs.db
+.DS_Store
 .vscode/
 .idea/

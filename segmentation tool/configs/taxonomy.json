@@ -1,0 +1,361 @@
+{
+  "version": "0.1",
+  "description": "Editable artifact class to possible-part taxonomy. Parts are optional unless explicitly selected; fragments may contain only one part.",
+  "classes": {
+    "pottery": {
+      "axis": "vertical_rim_to_base",
+      "parts": [
+        {
+          "name": "rim",
+          "zone": "top_band",
+          "y_range": [
+            0.0,
+            0.12
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "neck",
+          "zone": "upper_band",
+          "y_range": [
+            0.12,
+            0.28
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "shoulder",
+          "zone": "upper_middle_band",
+          "y_range": [
+            0.28,
+            0.45
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "body",
+          "zone": "middle_band",
+          "y_range": [
+            0.35,
+            0.85
+          ],
+          "optional": true,
+          "primary_fallback": true
+        },
+        {
+          "name": "base",
+          "zone": "bottom_band",
+          "y_range": [
+            0.82,
+            1.0
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "foot",
+          "zone": "bottom_band",
+          "y_range": [
+            0.88,
+            1.0
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "handle",
+          "zone": "side_projection",
+          "y_range": [
+            0.2,
+            0.75
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "spout",
+          "zone": "side_projection",
+          "y_range": [
+            0.05,
+            0.35
+          ],
+          "optional": true,
+          "primary_fallback": false
+        }
+      ]
+    },
+    "figurine": {
+      "axis": "vertical_head_to_base",
+      "parts": [
+        {
+          "name": "head",
+          "zone": "top_center",
+          "y_range": [
+            0.0,
+            0.24
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "face",
+          "zone": "top_center_inner",
+          "y_range": [
+            0.04,
+            0.22
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "torso",
+          "zone": "middle_center",
+          "y_range": [
+            0.22,
+            0.62
+          ],
+          "optional": true,
+          "primary_fallback": true
+        },
+        {
+          "name": "arms",
+          "zone": "side_middle",
+          "y_range": [
+            0.25,
+            0.7
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "legs",
+          "zone": "lower_center",
+          "y_range": [
+            0.58,
+            0.9
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "base/pedestal",
+          "zone": "bottom_band",
+          "y_range": [
+            0.84,
+            1.0
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "attributes",
+          "zone": "attached_small_regions",
+          "y_range": [
+            0.0,
+            1.0
+          ],
+          "optional": true,
+          "primary_fallback": false
+        }
+      ]
+    },
+    "lithic": {
+      "axis": "proximal_distal",
+      "parts": [
+        {
+          "name": "platform",
+          "zone": "proximal_band",
+          "y_range": [
+            0.82,
+            1.0
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "dorsal face",
+          "zone": "central_face",
+          "y_range": [
+            0.18,
+            0.82
+          ],
+          "optional": true,
+          "primary_fallback": true
+        },
+        {
+          "name": "ventral face",
+          "zone": "central_face",
+          "y_range": [
+            0.18,
+            0.82
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "bulb of percussion",
+          "zone": "lower_center",
+          "y_range": [
+            0.66,
+            0.9
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "distal end",
+          "zone": "distal_band",
+          "y_range": [
+            0.0,
+            0.18
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "proximal end",
+          "zone": "proximal_band",
+          "y_range": [
+            0.82,
+            1.0
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "retouched edge",
+          "zone": "outer_edge",
+          "y_range": [
+            0.0,
+            1.0
+          ],
+          "optional": true,
+          "primary_fallback": false
+        }
+      ]
+    },
+    "metalwork": {
+      "axis": "object_long_axis",
+      "parts": [
+        {
+          "name": "blade/body",
+          "zone": "main_body",
+          "y_range": [
+            0.0,
+            0.72
+          ],
+          "optional": true,
+          "primary_fallback": true
+        },
+        {
+          "name": "hilt/handle",
+          "zone": "lower_band",
+          "y_range": [
+            0.68,
+            1.0
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "tang",
+          "zone": "bottom_center",
+          "y_range": [
+            0.82,
+            1.0
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "socket",
+          "zone": "bottom_center",
+          "y_range": [
+            0.75,
+            1.0
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "decorative element",
+          "zone": "surface_detail",
+          "y_range": [
+            0.0,
+            1.0
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "corrosion/patina area",
+          "zone": "surface_detail",
+          "y_range": [
+            0.0,
+            1.0
+          ],
+          "optional": true,
+          "primary_fallback": false
+        }
+      ]
+    },
+    "organic": {
+      "axis": "object_long_axis",
+      "parts": [
+        {
+          "name": "shaft",
+          "zone": "main_body",
+          "y_range": [
+            0.18,
+            0.82
+          ],
+          "optional": true,
+          "primary_fallback": true
+        },
+        {
+          "name": "epiphysis/joint end",
+          "zone": "end_region",
+          "y_range": [
+            0.0,
+            0.22
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "working edge",
+          "zone": "outer_edge",
+          "y_range": [
+            0.0,
+            1.0
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "perforation/hafting point",
+          "zone": "hole_or_attachment",
+          "y_range": [
+            0.0,
+            1.0
+          ],
+          "optional": true,
+          "primary_fallback": false
+        },
+        {
+          "name": "decorated surface",
+          "zone": "surface_detail",
+          "y_range": [
+            0.0,
+            1.0
+          ],
+          "optional": true,
+          "primary_fallback": false
+        }
+      ]
+    }
+  }
+}

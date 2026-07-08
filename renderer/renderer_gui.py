@@ -24,10 +24,10 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 
 
-APP_VERSION = "0.3"
+APP_VERSION = "0.4"
 ROOT = Path(__file__).resolve().parent.parent
 MODELS_DIR = ROOT / "models"
-DEFAULT_OUTPUT = ROOT / "output"
+DEFAULT_OUTPUT = ROOT / "output" / "renderer"
 RENDERER = ROOT / "renderer" / "ply_spherical_renderer_windows.py"
 
 
@@ -197,6 +197,7 @@ class RendererGUI(tk.Tk):
 
         help_menu = tk.Menu(menubar, tearoff=False)
         help_menu.add_command(label="Renderer --help", command=self.show_renderer_help)
+        help_menu.add_command(label="Project workflow", command=self.show_project_help)
         help_menu.add_command(label="About", command=self.show_about)
         menubar.add_cascade(label="Help", menu=help_menu)
         self.config(menu=menubar)
@@ -805,6 +806,13 @@ class RendererGUI(tk.Tk):
             self.append_log(f"Could not terminate process: {exc}\n")
 
     def show_renderer_help(self) -> None:
+        """Show live argparse help from the actual renderer script.
+
+        This deliberately executes `ply_spherical_renderer_windows.py --help`
+        instead of duplicating a static help page, so the GUI help stays synced
+        with renderer changes such as -phi/-theta, --renderer-backend, and
+        shared project defaults.
+        """
         if not RENDERER.is_file():
             messagebox.showerror("Renderer missing", f"Could not find {RENDERER}")
             return
@@ -814,14 +822,78 @@ class RendererGUI(tk.Tk):
             messagebox.showerror("Failed to run renderer help", str(exc))
             return
         help_window = tk.Toplevel(self)
-        help_window.title("Renderer help")
-        help_window.geometry("900x650")
-        text = tk.Text(help_window, wrap="word")
+        help_window.title("Renderer --help - live from renderer script")
+        help_window.geometry("980x720")
+        text = tk.Text(help_window, wrap="word", font=("Consolas", 10))
         scroll = ttk.Scrollbar(help_window, orient="vertical", command=text.yview)
         text.configure(yscrollcommand=scroll.set)
         text.pack(side="left", fill="both", expand=True)
         scroll.pack(side="right", fill="y")
-        text.insert("1.0", completed.stdout or completed.stderr)
+        header = (
+            "This help is generated live by running:\n"
+            f"{sys.executable} {RENDERER} --help\n\n"
+            "Therefore it should stay up to date with the renderer CLI.\n"
+            "============================================================\n\n"
+        )
+        text.insert("1.0", header + (completed.stdout or completed.stderr or "No help text returned."))
+        text.configure(state="disabled")
+
+    def show_project_help(self) -> None:
+        help_window = tk.Toplevel(self)
+        help_window.title("3D-slicer project workflow")
+        help_window.geometry("900x620")
+        text = tk.Text(help_window, wrap="word", font=("Consolas", 10))
+        scroll = ttk.Scrollbar(help_window, orient="vertical", command=text.yview)
+        text.configure(yscrollcommand=scroll.set)
+        text.pack(side="left", fill="both", expand=True)
+        scroll.pack(side="right", fill="y")
+        content = f"""
+3D-slicer workflow
+==================
+
+Shared environment
+------------------
+Run once from the repository root:
+    setup_renderer_env.bat
+
+This creates/updates one shared venv at:
+    {ROOT / 'venv'}
+
+Renderer tools
+--------------
+CLI wrapper:
+    render_model.bat <model_or_folder> [output_folder] [renderer args...]
+    Default output folder: output\renderer
+
+GUI:
+    launch_renderer_gui.bat
+
+Common renderer args:
+    -phi N                 azimuth step, default 2
+    -theta N               polar/pitch step, default 2
+    --classification NAME  apply a class label to the run
+    --class-from-parent    use each model's parent folder as its class
+    --labels-csv FILE      read classifications from CSV
+    --dry-run              preview without rendering
+
+Segmentation tools
+------------------
+GUI:
+    launch_segmenter_gui.bat
+
+CLI:
+    python "segmentation tool\run_segmenter.py" <image_folder> output\segmenter --artifact-class figurine
+
+Repository folders
+------------------
+    models/              local PLY inputs; normally not committed
+    output/renderer     renderer outputs; normally not committed
+    output/segmenter    segmentation outputs; normally not committed
+    renderer/            renderer script, GUI, launcher, requirements
+    segmentation tool/   middle-stage segmentation tool
+    docs/                workflow and data-contract docs
+""".strip()
+        text.insert("1.0", content)
         text.configure(state="disabled")
 
     def show_about(self) -> None:
@@ -829,7 +901,8 @@ class RendererGUI(tk.Tk):
             "About",
             f"PLY Spherical Renderer GUI {APP_VERSION}\n\n"
             f"Project root:\n{ROOT}\n\n"
-            "This GUI builds and runs commands for ply_spherical_renderer_windows.py.",
+            "This GUI builds and runs commands for ply_spherical_renderer_windows.py. "
+            "It uses the shared root venv and reads renderer --help live from the renderer script.",
         )
 
 

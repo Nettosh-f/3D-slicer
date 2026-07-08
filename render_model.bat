@@ -3,10 +3,10 @@ setlocal
 cd /d "%~dp0"
 set "ROOT=%cd%"
 set "VENV=%ROOT%\venv"
-set "LAUNCHER=%ROOT%\renderer\renderer_launcher_v2.py"
+set "LAUNCHER=%ROOT%\renderer\renderer_launcher.py"
 
 if not exist "%VENV%\Scripts\python.exe" (
-    echo Virtual environment not found. Running setup first...
+    echo Shared virtual environment not found. Running setup first...
     call "%ROOT%\setup_renderer_env.bat" --no-pause
     if errorlevel 1 exit /b 1
 )

@@ -14,22 +14,22 @@ It writes a CSV manifest containing one row per expected/rendered image.
 Examples
 --------
 Single model, default 2-degree sampling:
-    python ply_spherical_renderer.py model.ply output
+    python ply_spherical_renderer.py model.ply output/renderer
 
 Full 1-degree sampling:
-    python ply_spherical_renderer.py model.ply output -phi 1 -theta 1
+    python ply_spherical_renderer.py model.ply output/renderer -phi 1 -theta 1
 
 Directory of models, class inferred from each model's parent folder:
-    python ply_spherical_renderer.py dataset output --class-from-parent
+    python ply_spherical_renderer.py dataset output/renderer --class-from-parent
 
 Faster test run, one image every 10 degrees:
-    python ply_spherical_renderer.py dataset output --phi-step 10 --theta-step 10
+    python ply_spherical_renderer.py dataset output/renderer --phi-step 10 --theta-step 10
 
 Use a label CSV containing columns origin_file and classification:
-    python ply_spherical_renderer.py dataset output --labels-csv labels.csv
+    python ply_spherical_renderer.py dataset output/renderer --labels-csv labels.csv
 
 Linux headless CPU rendering:
-    python ply_spherical_renderer.py dataset output --headless-cpu
+    python ply_spherical_renderer.py dataset output/renderer --headless-cpu
 """
 
 from __future__ import annotations
