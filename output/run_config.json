@@ -1,0 +1,61 @@
+{
+  "created_utc": "2026-07-07T15:51:18.994547+00:00",
+  "input": "C:\\Users\\netta\\Downloads\\renderer_starter_kit_v2_fixed\\renderer_starter_kit\\models\\HAD93_3075_1.ply",
+  "output": "C:\\Users\\netta\\Downloads\\renderer_starter_kit_v2_fixed\\renderer_starter_kit\\output",
+  "model_count": 1,
+  "images_per_model": 162,
+  "total_expected_images": 162,
+  "phi_values_deg": [
+    0,
+    20,
+    40,
+    60,
+    80,
+    100,
+    120,
+    140,
+    160,
+    180,
+    200,
+    220,
+    240,
+    260,
+    280,
+    300,
+    320,
+    340
+  ],
+  "theta_values_deg": [
+    0,
+    20,
+    40,
+    60,
+    80,
+    100,
+    120,
+    140,
+    160
+  ],
+  "camera_convention": "phi is azimuth: 0=+X, 90=+Y; theta is polar angle from +Z; camera looks at the model bounding-box center",
+  "width": 512,
+  "height": 512,
+  "vertical_fov_deg": 45.0,
+  "margin": 1.08,
+  "point_size_px": 3.0,
+  "background_rgba": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "base_color_rgba": [
+    0.72,
+    0.72,
+    0.72,
+    1.0
+  ],
+  "overwrite": false,
+  "hash_source": false,
+  "renderer_backend_requested": "auto",
+  "renderer_backend_selected": "visualizer"
+}
