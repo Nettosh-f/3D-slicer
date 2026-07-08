@@ -1,0 +1,3 @@
+origin_file,classification
+example_model.ply,example_class
+class_b/another_model.ply,class_b
