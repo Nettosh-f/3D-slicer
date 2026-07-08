@@ -1,0 +1,2 @@
+Put your .ply files here.
+You can also create subfolders here and pass the subfolder name to render_model.bat.
