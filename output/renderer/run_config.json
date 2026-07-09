@@ -1,22 +1,37 @@
 {
-  "created_utc": "2026-07-08T10:27:39.861155+00:00",
-  "input": "D:\\For Neta 29062026\\TEL HADAR\\HAD_343_2033.ply",
+  "created_utc": "2026-07-08T14:19:31.225741+00:00",
+  "input": "C:\\Users\\netta\\OneDrive\\Documents\\Coding Projects\\3D renderer and segmenter\\models\\HAD_343_2033 JUG.ply",
   "output": "C:\\Users\\netta\\OneDrive\\Documents\\Coding Projects\\3D renderer and segmenter\\output\\renderer",
   "model_count": 1,
-  "images_per_model": 18,
-  "total_expected_images": 18,
+  "images_per_model": 80,
+  "total_expected_images": 80,
   "phi_values_deg": [
     0,
-    60,
-    120,
+    18,
+    36,
+    54,
+    72,
+    90,
+    108,
+    126,
+    144,
+    162,
     180,
-    240,
-    300
+    198,
+    216,
+    234,
+    252,
+    270,
+    288,
+    306,
+    324,
+    342
   ],
   "theta_values_deg": [
     0,
-    60,
-    120
+    54,
+    108,
+    162
   ],
   "camera_convention": "phi is azimuth: 0=+X, 90=+Y; theta is polar angle from +Z; camera looks at the model bounding-box center",
   "width": 512,
@@ -38,6 +53,8 @@
   ],
   "overwrite": false,
   "hash_source": false,
-  "renderer_backend_requested": "auto",
-  "renderer_backend_selected": "visualizer"
+  "renderer_backend_requested": "visualizer",
+  "renderer_backend_selected": "visualizer",
+  "cross_section_enabled": true,
+  "cross_section_axis": "auto"
 }

@@ -51,7 +51,7 @@ from typing import Any, Iterable, Sequence
 import numpy as np
 
 
-SCRIPT_VERSION = "2.1-windows-visualizer"
+SCRIPT_VERSION = "2.2-windows-cross-section"
 
 
 MANIFEST_FIELDS = [
@@ -108,6 +108,21 @@ MANIFEST_FIELDS = [
 ]
 
 ERROR_FIELDS = ["origin_file", "origin_absolute_path", "error_type", "error_message"]
+
+CROSS_SECTION_FIELDS = [
+    "model_id",
+    "classification",
+    "origin_file",
+    "origin_absolute_path",
+    "cross_section_file",
+    "cross_section_relative_path",
+    "cross_section_absolute_path",
+    "cross_section_axis",
+    "cross_section_plane_normal",
+    "cross_section_status",
+    "image_width_px",
+    "image_height_px",
+]
 
 
 @dataclass
@@ -265,6 +280,22 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Print the planned image count and output locations without loading Open3D or rendering.",
     )
+    parser.add_argument(
+        "--no-cross-section",
+        action="store_false",
+        dest="cross_section",
+        help="Skip exporting one mid-plane binary (black/white) cross-section PNG per model.",
+    )
+    parser.add_argument(
+        "--cross-section-axis",
+        choices=("auto", "x", "y", "z"),
+        default="auto",
+        help=(
+            "Slice plane for the cross-section image. auto picks the thinnest bbox axis "
+            "(typical sherd thickness direction). Default: auto"
+        ),
+    )
+    parser.set_defaults(cross_section=True)
     return parser.parse_args()
 
 
@@ -647,6 +678,8 @@ def write_run_config(args: argparse.Namespace, records: Sequence[ModelRecord], i
         "hash_source": args.hash_source,
         "renderer_backend_requested": args.renderer_backend,
         "renderer_backend_selected": select_renderer_backend(args),
+        "cross_section_enabled": args.cross_section,
+        "cross_section_axis": args.cross_section_axis,
     }
     config_path = args.output / "run_config.json"
     with config_path.open("w", encoding="utf-8") as handle:
@@ -733,11 +766,33 @@ def render_model(
     model: ModelRecord,
     manifest_writer: csv.DictWriter,
     manifest_handle: Any,
-) -> tuple[int, int]:
+) -> tuple[int, int, dict[str, str] | None]:
     source_stat = model.source_path.stat()
     source_hash = sha256_file(model.source_path) if args.hash_source else ""
 
     geometry_info = load_geometry(o3d, model.source_path, args.base_color)
+    cross_section_info: dict[str, str] | None = None
+    if args.cross_section:
+        from cross_section import export_cross_section
+
+        class_folder = safe_component(model.classification, fallback="unclassified")
+        cross_section_info = export_cross_section(
+            o3d=o3d,
+            geometry_info=geometry_info,
+            model_id=model.model_id,
+            class_folder=class_folder,
+            output_root=output_root,
+            width=args.width,
+            height=args.height,
+            axis=args.cross_section_axis,
+            overwrite=args.overwrite,
+        )
+        print(
+            f"    cross-section ({cross_section_info['cross_section_status']}): "
+            f"{cross_section_info['cross_section_relative_path']}",
+            flush=True,
+        )
+
     camera_distance = calculate_camera_distance(
         geometry_info.radius,
         args.width,
@@ -931,7 +986,7 @@ def render_model(
         if visualizer is not None:
             visualizer.destroy_window()
 
-    return rendered_count, reused_count
+    return rendered_count, reused_count, cross_section_info
 
 def print_plan(args: argparse.Namespace, records: Sequence[ModelRecord]) -> None:
     phi_values = list(range(0, 360, args.phi_step))
@@ -946,6 +1001,7 @@ def print_plan(args: argparse.Namespace, records: Sequence[ModelRecord]) -> None
     print(f"Total images:        {total:,}")
     print(f"Image size:          {args.width} x {args.height} px")
     print(f"Renderer backend:    {select_renderer_backend(args)}")
+    print(f"Cross-section PNG:   {'yes' if args.cross_section else 'no'} (axis={args.cross_section_axis})")
     print(f"Output directory:    {args.output.expanduser().resolve()}")
     print(f"Manifest:            {(args.output.expanduser().resolve() / 'manifest.csv')}")
 
@@ -1008,6 +1064,7 @@ def main() -> int:
     write_run_config(args, records, image_count_per_model)
 
     manifest_path = args.output / "manifest.csv"
+    cross_sections_path = args.output / "cross_sections.csv"
     errors_path = args.output / "errors.csv"
     total_rendered = 0
     total_reused = 0
@@ -1015,10 +1072,13 @@ def main() -> int:
 
     with (
         manifest_path.open("w", newline="", encoding="utf-8-sig") as manifest_handle,
+        cross_sections_path.open("w", newline="", encoding="utf-8-sig") as cross_sections_handle,
         errors_path.open("w", newline="", encoding="utf-8-sig") as errors_handle,
     ):
         manifest_writer = csv.DictWriter(manifest_handle, fieldnames=MANIFEST_FIELDS)
         manifest_writer.writeheader()
+        cross_sections_writer = csv.DictWriter(cross_sections_handle, fieldnames=CROSS_SECTION_FIELDS)
+        cross_sections_writer.writeheader()
         error_writer = csv.DictWriter(errors_handle, fieldnames=ERROR_FIELDS)
         error_writer.writeheader()
 
@@ -1030,7 +1090,7 @@ def main() -> int:
                 flush=True,
             )
             try:
-                rendered, reused = render_model(
+                rendered, reused, cross_info = render_model(
                     o3d=o3d,
                     args=args,
                     output_root=args.output,
@@ -1041,6 +1101,19 @@ def main() -> int:
                 manifest_handle.flush()
                 total_rendered += rendered
                 total_reused += reused
+                if cross_info is not None:
+                    cross_sections_writer.writerow(
+                        {
+                            "model_id": model.model_id,
+                            "classification": model.classification,
+                            "origin_file": model.source_path.name,
+                            "origin_absolute_path": str(model.source_path),
+                            "image_width_px": args.width,
+                            "image_height_px": args.height,
+                            **cross_info,
+                        }
+                    )
+                    cross_sections_handle.flush()
                 print(f"    rendered={rendered:,}, existing={reused:,}", flush=True)
             except Exception as exc:
                 failed_models += 1
